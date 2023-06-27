@@ -15,5 +15,5 @@ Dependencies
 
 Known issues
 -----
-Progress bar starts at around 99% and it doesn't reset to 0 when the conversion is done. 
-The software can't be gracefully stopped mid conversion.
+- Progress bar starts at around 99% and it doesn't reset to 0 when the conversion is done. 
+- The software can't be gracefully stopped mid conversion.
