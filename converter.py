@@ -13,6 +13,12 @@ ffprobe_path = os.path.join(os.getcwd(), 'ffprobe.exe')
 # Desired output file size in MB
 file_size_mb = 3
 
+# Global variables
+file_path = None
+output_file = None
+duration_s = 0
+conversion_in_progress = False
+
 def get_video_duration(input_file):
     command = f'"{ffprobe_path}" -v quiet -print_format json -show_format -show_streams "{input_file}"'
     output = subprocess.check_output(command, shell=True, text=True)
@@ -26,6 +32,14 @@ def calculate_bitrate(file_size_mb, duration_s):
     return bitrate_k
 
 def convert_to_webm(input_file, output_file, duration_s):
+    global conversion_in_progress
+
+    # Disable the "Go" button during conversion
+    go_button.config(state='disabled')
+
+    # Update the message label
+    message_label.config(text="Conversion in progress, please wait...")
+
     # Delete existing output file if it exists
     if os.path.exists(output_file):
         os.remove(output_file)
@@ -60,6 +74,13 @@ def convert_to_webm(input_file, output_file, duration_s):
         else:
             print(f'Successfully converted {input_file} to {output_file}')
 
+    # Enable the "Go" button after conversion is finished
+    go_button.config(state='normal')
+    conversion_in_progress = False
+
+    # Update the message label
+    message_label.config(text="Conversion completed.")
+
 def browse_file():
     global file_path, output_file, duration_s
     file_path = filedialog.askopenfilename(filetypes=(("MP4 files", "*.mp4"), ("MKV files", "*.mkv"), ("All files", "*.*")))
@@ -69,12 +90,18 @@ def browse_file():
         label.config(text="Selected file: " + os.path.basename(file_path))  # Display selected filename
 
 def start_conversion():
+    global conversion_in_progress
+
+    if conversion_in_progress:
+        return  # Skip if a conversion is already in progress
+
+    conversion_in_progress = True
     threading.Thread(target=convert_to_webm, args=(file_path, output_file, duration_s)).start()
 
 root = Tk()
 root.title('4chan webm converter')
-root.geometry('460x232')
-root.minsize(460, 232)
+root.geometry('460x250')
+root.minsize(460, 250)
 
 label = Label(root, text="Place the file here")
 label.pack()
@@ -89,5 +116,8 @@ progress_bar.pack(pady=20)
 
 go_button = Button(root, text="Go", command=start_conversion)
 go_button.pack(pady=10)
+
+message_label = Label(root, text="")
+message_label.pack()
 
 root.mainloop()
