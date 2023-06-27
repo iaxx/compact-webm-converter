@@ -99,7 +99,7 @@ def start_conversion():
     threading.Thread(target=convert_to_webm, args=(file_path, output_file, duration_s)).start()
 
 root = Tk()
-root.title('4chan webm converter')
+root.title('3mb webm converter')
 root.geometry('460x250')
 root.minsize(460, 250)
 
