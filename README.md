@@ -1,4 +1,4 @@
-# 4chan-webm-converter
+# 3mb-webm-converter
 
 A simple script that takes an .mp4 file and turns it into a .webm that's under 3mb and removes the audio.
 
