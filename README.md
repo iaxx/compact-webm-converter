@@ -7,6 +7,7 @@ Usage
 1. Open converter.exe
 2. Browse for an .mp4/.mkv file
 3. Click go and wait
+4. Yes the startup is slow. 
 
 Dependencies 
 -----
