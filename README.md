@@ -12,3 +12,8 @@ Dependencies
 -----
 - ffmpeg(included in release)
 - ffprobe(included in release)
+
+Known issues
+-----
+Progress bar starts at around 99% and it doesn't reset to 0 when the conversion is done. 
+The software can't be gracefully stopped mid conversion.
