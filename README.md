@@ -6,10 +6,12 @@ A simple script that takes an .mp4 file and turns it into a .webm that's under 3
 
 Usage
 -----
-1. Open converter.exe
-2. Browse for an .mp4/.mkv file
-3. Click go and wait
-4. Yes the startup is slow. 
+1. Download it from [here](https://github.com/iaxx/3mb-webm-converter/releases)
+2. Unzip it
+3. Open converter.exe
+4. Browse for an .mp4/.mkv file
+5. Click go and wait
+6. Yes the startup is slow. 
 
 Dependencies 
 -----
