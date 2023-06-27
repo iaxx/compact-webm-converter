@@ -31,8 +31,14 @@ def convert_to_webm(input_file, output_file, duration_s):
         os.remove(output_file)
 
     try:
+        file_extension = os.path.splitext(input_file)[1]
+        if file_extension == '.mkv':
+            codec_option = '-c:v libvpx-vp9'
+        else:
+            codec_option = '-c:v libvpx'
+
         bitrate_k = calculate_bitrate(file_size_mb, duration_s) * 0.96
-        command = f'"{ffmpeg_path}" -i "{input_file}" -c:v libvpx-vp9 -b:v {bitrate_k}k -vf "fps=fps=30" -pass 1 -an -f webm NUL && "{ffmpeg_path}" -i "{input_file}" -c:v libvpx-vp9 -b:v {bitrate_k}k -vf "fps=fps=30" -pass 2 -an -f webm "{output_file}"'
+        command = f'"{ffmpeg_path}" -i "{input_file}" {codec_option} -b:v {bitrate_k}k -vf "fps=fps=30" -pass 1 -an -f webm NUL && "{ffmpeg_path}" -i "{input_file}" {codec_option} -b:v {bitrate_k}k -vf "fps=fps=30" -pass 2 -an -f webm "{output_file}"'
         process = subprocess.Popen(command, shell=True, stderr=subprocess.PIPE, universal_newlines=True)
         regex = re.compile(r'time=(\d+:\d+:\d+.\d+)')
         while True:
@@ -56,7 +62,7 @@ def convert_to_webm(input_file, output_file, duration_s):
 
 def browse_file():
     global file_path, output_file, duration_s
-    file_path = filedialog.askopenfilename(filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*")))
+    file_path = filedialog.askopenfilename(filetypes=(("MP4 files", "*.mp4"), ("MKV files", "*.mkv"), ("All files", "*.*")))
     if file_path:
         output_file = file_path.rsplit('.', 1)[0] + '.webm'
         duration_s = get_video_duration(file_path)
