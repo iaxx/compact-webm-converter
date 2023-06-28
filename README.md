@@ -1,6 +1,6 @@
-![converter_C7G56aNaxd](https://github.com/iaxx/3mb-webm-converter/assets/13745514/97c9b51c-8109-44c3-8832-f6a791d737ad)
+![converter_lAoJS94U2v](https://github.com/iaxx/compact-webm-converter/assets/13745514/0d5162b3-c3e7-454d-9575-f8bcb0a1e3f3)
 
-# 3mb-webm-converter
+# compact-webm-converter
 
 A simple script that takes an .mp4 file and turns it into a .webm that's under 3mb and removes the audio.
 
