@@ -3,7 +3,7 @@
 
 # compact-webm-converter
 
-A simple script that takes an .mp4 file and turns it into a .webm that's under 3mb and removes the audio.
+A simple script that takes an .mp4/mkv file and turns it into a VP9 .webm
 
 Usage
 -----
