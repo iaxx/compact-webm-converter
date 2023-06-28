@@ -1,4 +1,5 @@
-![converter_lAoJS94U2v](https://github.com/iaxx/compact-webm-converter/assets/13745514/0d5162b3-c3e7-454d-9575-f8bcb0a1e3f3)
+
+![converter_qPy1iOWy2w](https://github.com/iaxx/compact-webm-converter/assets/13745514/b173ffcd-28c3-40ab-a855-5c24e6861c9b)
 
 # compact-webm-converter
 
