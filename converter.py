@@ -20,6 +20,7 @@ class WebmConverter:
         self.conversion_in_progress = False
         self.halve_resolution = False  # Flag to check if resolution should be halved
         self.target_framerate = 30  # Default target framerate
+        self.remove_audio = False # Audio is not removed by default
 
         self.label = Label(self.root, text="Place the file here")
         self.label.pack()
@@ -31,6 +32,27 @@ class WebmConverter:
         self.progress_var.set('0')
         self.progress_bar = Progressbar(self.root, length=400, mode='determinate', variable=self.progress_var)
         self.progress_bar.pack(pady=20)
+
+        self.audio_frame = LabelFrame(self.root, text="Audio")
+        self.audio_frame.pack(pady=5)
+
+        self.audio_on_button = Button(self.audio_frame, text="On", command=self.set_audio_on)
+        self.audio_on_button.pack(side="left", padx=5)
+
+        self.audio_off_button = Button(self.audio_frame, text="Off", command=self.set_audio_off)
+        self.audio_off_button.pack(side="left", padx=5)
+
+        self.size_limit_frame = LabelFrame(self.root, text="File Size Limit (MB)")
+        self.size_limit_frame.pack(pady=5)
+
+        self.size_limit_3mb_button = Button(self.size_limit_frame, text="3 MB", command=self.set_size_limit_3mb)
+        self.size_limit_3mb_button.pack(side="left", padx=5)
+
+        self.size_limit_4mb_button = Button(self.size_limit_frame, text="4 MB", command=self.set_size_limit_4mb)
+        self.size_limit_4mb_button.pack(side="left", padx=5)
+
+        self.size_limit_8mb_button = Button(self.size_limit_frame, text="8 MB", command=self.set_size_limit_8mb)
+        self.size_limit_8mb_button.pack(side="left", padx=5)
 
         self.resolution_frame = LabelFrame(self.root, text="Resolution")
         self.resolution_frame.pack(pady=5)
@@ -95,7 +117,8 @@ class WebmConverter:
             scale_option = f"scale={width}:{height}"
 
             bitrate_k = self.calculate_bitrate(duration_s) * 0.96
-            command = f'"{self.ffmpeg_path}" -i "{input_file}" -c:v vp9 -b:v {bitrate_k}k -vf "{scale_option},fps=fps={self.target_framerate}" -pass 1 -an -f webm NUL && "{self.ffmpeg_path}" -i "{input_file}" -c:v vp9 -b:v {bitrate_k}k -vf "{scale_option},fps=fps={self.target_framerate}" -pass 2 -an -f webm "{output_file}"'
+            audio_option = "-an" if self.remove_audio else ""
+            command = f'"{self.ffmpeg_path}" -i "{input_file}" -c:v vp9 -b:v {bitrate_k}k -vf "{scale_option},fps=fps={self.target_framerate}" {audio_option} -pass 1 -f webm NUL && "{self.ffmpeg_path}" -i "{input_file}" -c:v vp9 -b:v {bitrate_k}k -vf "{scale_option},fps=fps={self.target_framerate}" {audio_option} -pass 2 -f webm "{output_file}"'
             process = subprocess.Popen(command, shell=True, stderr=subprocess.PIPE, universal_newlines=True)
             regex = re.compile(r'time=(\d+:\d+:\d+.\d+)')
             while True:
@@ -142,6 +165,16 @@ class WebmConverter:
         self.conversion_in_progress = True
         threading.Thread(target=self.convert_to_webm, args=(self.file_path, self.output_file, self.duration_s)).start()
 
+    def set_audio_on(self):
+        self.remove_audio = False
+        self.audio_on_button.config(state='disabled')
+        self.audio_off_button.config(state='normal')
+
+    def set_audio_off(self):
+        self.remove_audio = True
+        self.audio_off_button.config(state='disabled')
+        self.audio_on_button.config(state='normal')
+
     def set_half_resolution(self):
         self.halve_resolution = True
         self.half_res_button.config(state='disabled')
@@ -162,11 +195,28 @@ class WebmConverter:
         self.framerate_60_button.config(state='disabled')
         self.framerate_30_button.config(state='normal')
 
+    def set_size_limit_3mb(self):
+        self.file_size_mb = 3
+        self.size_limit_3mb_button.config(state='disabled')
+        self.size_limit_4mb_button.config(state='normal')
+        self.size_limit_8mb_button.config(state='normal')
+
+    def set_size_limit_4mb(self):
+        self.file_size_mb = 4
+        self.size_limit_4mb_button.config(state='disabled')
+        self.size_limit_3mb_button.config(state='normal')
+        self.size_limit_8mb_button.config(state='normal')
+
+    def set_size_limit_8mb(self):
+        self.file_size_mb = 8
+        self.size_limit_8mb_button.config(state='disabled')
+        self.size_limit_3mb_button.config(state='normal')
+        self.size_limit_4mb_button.config(state='normal')
 
 root = Tk()
 root.title('3mb webm converter')
-root.geometry('490x340')
-root.minsize(490, 340)
+root.geometry('615x466')
+root.minsize(615, 466)
 
 ffmpeg_path = os.path.join(os.getcwd(), 'ffmpeg.exe')
 ffprobe_path = os.path.join(os.getcwd(), 'ffprobe.exe')
